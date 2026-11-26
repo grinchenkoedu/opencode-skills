@@ -88,3 +88,23 @@ pressure, and each one skipped is a real hole rather than a style lapse.
   and a version string. Never hard-code a `<script>` tag into a template.
 - Use the CMS's translation functions for user-facing text rather than inline literals.
 
+### Design priorities
+
+Prefer the design that is easier to read, then easier to change, then easier to extend, then
+cheaper in memory and time — in that order. Efficiency is last, not absent: weigh it at the scale
+the data actually has, and give an optimisation that costs readability a measured reason.
+
+### Code provenance
+
+New code is written here, installed as a dependency through the package manager, or taken from
+code under this project's own licence with its header kept. Code from a codebase under a
+different licence — closed, or open source, MIT included — needs the developer's approval
+first and its source and licence named in the commit; renaming a pasted block does not make it
+original, and a library the project could depend on is not vendored piecemeal.
+
+### Long-running work
+
+Work the user need not wait for does not run on the path they wait on. An export, bulk update, or
+external API call that may outlast a page load goes to the CMS's background queue/cron mechanism
+rather than running inline in a web request.
+
