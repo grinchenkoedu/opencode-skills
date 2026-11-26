@@ -22,8 +22,8 @@ Answer yes or no. Do not weigh, rank or reconsider — just answer.
 - **C3 DRYRUN** — is it a script that writes in bulk, with no dry-run as the default?
 - **C4 RERUN** — would a second run duplicate rows or double-apply the change?
 - **C5 CALLER** — does it rename or remove a function, method or class?
-- **C6 ESCAPE** — does user input reach SQL, HTML or a spreadsheet cell unescaped?
-- **C7 AUTHZ** — does it add, remove or change a permission or capability check?
+- **C6 ESCAPE** — does user input reach SQL, HTML, a spreadsheet cell, a filesystem path, or an outbound fetch (SSRF) unescaped/unvalidated?
+- **C7 AUTHZ** — does it add, remove or change a permission, capability, or CSRF token check?
 - **C8 VERSION** — *(moodle-plugin only)* does it touch `classes/`, `db/`, caches or tasks with no `version.php` bump?
 - **C9 NULL** — does it use a value that can be null without checking?
 - **C10 LOOP** — does it add a loop, cursor or search that may not terminate on empty, duplicate or gapped data?
@@ -34,23 +34,11 @@ Answer yes or no. Do not weigh, rank or reconsider — just answer.
 
 ## C5 is grep, not judgement
 
-For every renamed or removed symbol, grep the files the current step names — `bash ${DEV_SKILLS_LIB:-$HOME/.config/opencode/dev-lib}/task-step.sh <task-file> --paths <n>` lists them — then run:
-
-```
-bash ${DEV_SKILLS_LIB:-$HOME/.config/opencode/dev-lib}/callers.sh "<oldname>"
-```
-
-Any surviving caller in code, tests/ or views/ is a BLOCKER. Do not reason about reachability — report what callers.sh found.
+For every renamed or removed symbol, grep `bash ${DEV_SKILLS_LIB:-$HOME/.config/opencode/dev-lib}/task-step.sh <task-file> --paths <n>`, then run `bash ${DEV_SKILLS_LIB:-$HOME/.config/opencode/dev-lib}/callers.sh "<oldname>"`. Any surviving caller in code, tests/ or views/ is a BLOCKER; report what callers.sh found.
 
 ## The output line
 
-One line per finding in `.devskills/findings.md`, exactly this shape:
-
-```
-SEVERITY | path:line | one sentence on what breaks | EVIDENCE: <the exact line from the file>
-```
-
-**EVIDENCE is copied, character for character.** If you cannot copy a line that proves the finding, do not write it — an unverifiable one is deleted below. One sentence; no diff dumps.
+One line per finding in `.devskills/findings.md`: `SEVERITY | path:line | one sentence on what breaks | EVIDENCE: <exact line from file>`. **EVIDENCE is copied verbatim** — if you cannot copy a proving line, do not write it. One sentence; no diff dumps.
 
 ## Finish
 
@@ -85,6 +73,7 @@ Queue — rank 1 is highest risk, top-down:
 
 !`bash ${DEV_SKILLS_LIB:-$HOME/.config/opencode/dev-lib}/changed.sh`
 
+Security sweep (leads to verify, not findings):
+!`bash ${DEV_SKILLS_LIB:-$HOME/.config/opencode/dev-lib}/security-sweep.sh`
 Diff:
-
 !`bash ${DEV_SKILLS_LIB:-$HOME/.config/opencode/dev-lib}/diff.sh`
