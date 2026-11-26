@@ -141,6 +141,7 @@ Cloud models work with OpenCode's built-in providers. If you also configure loca
 | `/dev-review` | Runs 12 yes/no checks on changed files with mechanical quote verification | No |
 | `/dev-fix [<issue>\|<file>]` | Plans verified bug fixes into `.tasks/`, or applies post-review findings | Yes |
 | `/dev-pr` | Pushes the step branch, opens stacked PR with `Depends on #` | No |
+| `/dev-pr-resolve [<pr>]` | Triages review comments on your own PR, fixes, pushes, and replies | Yes |
 | `/dev-verify` | Runs test suites and exercises runtime behaviour inside Docker containers | No |
 | `/dev-pr-review <pr>` | Reviews an external PR against a structured checklist | No |
 
