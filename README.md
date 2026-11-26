@@ -21,7 +21,7 @@ Instead of relying on fragile multi-variable reasoning and prompt guesswork, the
 `opencode-skills` works with any cloud or local model in OpenCode. For fast, low-cost cloud runs:
 
 1. **DeepSeek V4.1 Flash** — Very low cost, fast tool calling, and strong code generation.
-2. **Gemini 3.8 Flash** — Low cost, large context window, and reliable structured edits.
+2. **Gemini 4 Hydrogen** (or **Gemini 3.8 Flash** for ultra-low-cost Flash tier) — Fast, large context window, and reliable structured edits.
 3. **Claude Haiku** — Fast, dependable instruction following and diff editing.
 4. **Qwen3-Coder** — Strong code generation and diff analysis across cloud providers.
 
