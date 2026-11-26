@@ -4,7 +4,7 @@
   <a href="https://opencode.ai"><img src="https://img.shields.io/badge/OpenCode-1B1B1B?style=for-the-badge" alt="OpenCode" /></a>
   <img src="https://img.shields.io/badge/Cloud_%26_Local-6E56CF?style=for-the-badge" alt="Cloud & Local" />
   <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
-  <a href="https://github.com/matasarei/opencode-skills/actions/workflows/checks.yml"><img src="https://img.shields.io/github/actions/workflow/status/matasarei/opencode-skills/checks.yml?style=for-the-badge&label=Checks" alt="Checks" /></a>
+  <a href="https://github.com/grinchenkoedu/opencode-skills/actions/workflows/checks.yml"><img src="https://img.shields.io/github/actions/workflow/status/grinchenkoedu/opencode-skills/checks.yml?style=for-the-badge&label=Checks" alt="Checks" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-3DA639?style=for-the-badge" alt="License: MIT" /></a>
 </p>
 
@@ -39,7 +39,7 @@ If you run locally (we recommend [`pi-dev-skills`](https://github.com/matasarei/
 ## Installation & Setup
 
 ```bash
-git clone https://github.com/matasarei/opencode-skills.git
+git clone https://github.com/grinchenkoedu/opencode-skills.git
 cd opencode-skills
 
 # Install globally (to ~/.config/opencode)
@@ -135,6 +135,7 @@ Cloud models work with OpenCode's built-in providers. If you also configure loca
 | Command | Purpose | Code Modified? |
 |---|---|---|
 | `/dev-init` | Detects project stack and writes repo conventions to `AGENTS.md` | Yes (`AGENTS.md`) |
+| `/dev-audit` | Audits the whole repo for security, quality, and agent readiness into `.tasks/` | No |
 | `/dev-research <query>` | Investigates repo + upstream docs/issues; outputs TL;DR or `.tasks/*.md` | No |
 | `/dev-plan <request>` | Investigates code, sizes steps against budget, writes `.tasks/*.md` | No |
 | `/dev-plan-manual <request>` | Plans work **you** write by hand, one walkthrough at a time as you reach it | No |

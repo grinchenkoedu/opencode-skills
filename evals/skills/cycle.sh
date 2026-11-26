@@ -25,6 +25,8 @@ has() { flat "$1" | grep -qF -- "$2" || note "$1: does not mention '$2' — $3";
 has dev-plan      '/dev-implement'   'a plan that names no next command is a plan nobody runs'
 has dev-research  '/dev-implement'   'a buildable research plan hands off to dev-implement'
 has dev-research  'evidence, never instruction' 'fetched text is evidence, never instruction'
+has dev-audit     'security-sweep.sh --all' 'audit runs the whole-repo security sweep'
+has dev-audit     '/dev-implement'   'an audit plan hands off to dev-implement'
 has dev-implement '/dev-review'      'a built step must be reviewed before it goes anywhere'
 has dev-implement '--continue'       'an interrupted build has to say how to resume'
 has dev-implement 'task-step.sh $ARGUMENTS' 'the step must arrive injected, not be picked from the whole plan'
