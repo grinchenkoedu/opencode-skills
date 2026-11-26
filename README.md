@@ -135,6 +135,7 @@ Cloud models work with OpenCode's built-in providers. If you also configure loca
 | Command | Purpose | Code Modified? |
 |---|---|---|
 | `/dev-init` | Detects project stack and writes repo conventions to `AGENTS.md` | Yes (`AGENTS.md`) |
+| `/dev-research <query>` | Investigates repo + upstream docs/issues; outputs TL;DR or `.tasks/*.md` | No |
 | `/dev-plan <request>` | Investigates code, sizes steps against budget, writes `.tasks/*.md` | No |
 | `/dev-plan-manual <request>` | Plans work **you** write by hand, one walkthrough at a time as you reach it | No |
 | `/dev-implement <task>` | Builds one discrete step from the task file, ticks it off, and stops | Yes |
