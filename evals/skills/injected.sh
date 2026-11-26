@@ -73,8 +73,8 @@ git -C "$proj" -c user.email=t@t -c user.name=t commit -qm base >/dev/null
 args_for() {
   case "$1" in
     dev-implement|dev-plan-manual) printf '%s' '.tasks/plan.md' ;;
-    dev-plan|dev-fix) printf '%s' 'add a CSV option to the roster export' ;;
-    dev-pr-review) printf '%s' '1' ;;
+    dev-plan|dev-fix|dev-research) printf '%s' 'add a CSV option to the roster export' ;;
+    dev-pr-review|dev-pr-resolve) printf '%s' '1' ;;
     *) printf '' ;;
   esac
 }

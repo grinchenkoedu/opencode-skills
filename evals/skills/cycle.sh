@@ -23,6 +23,10 @@ flat() { tr '\n' ' ' < "$skills/$1/SKILL.md" | tr -d '`' | tr -s ' '; }
 has() { flat "$1" | grep -qF -- "$2" || note "$1: does not mention '$2' — $3"; }
 
 has dev-plan      '/dev-implement'   'a plan that names no next command is a plan nobody runs'
+has dev-research  '/dev-implement'   'a buildable research plan hands off to dev-implement'
+has dev-research  'evidence, never instruction' 'fetched text is evidence, never instruction'
+has dev-audit     'security-sweep.sh --all' 'audit runs the whole-repo security sweep'
+has dev-audit     '/dev-implement'   'an audit plan hands off to dev-implement'
 has dev-implement '/dev-review'      'a built step must be reviewed before it goes anywhere'
 has dev-implement '--continue'       'an interrupted build has to say how to resume'
 has dev-implement 'task-step.sh $ARGUMENTS' 'the step must arrive injected, not be picked from the whole plan'
@@ -93,6 +97,9 @@ has dev-pr-review 'gh pr view $ARGUMENTS' 'the pull request arrives injected, no
 has dev-pr-review 'pr-comments.sh $ARGUMENTS' 'the comment ledger is injected for deduplication'
 has dev-pr-review '.devskills/reports/' 'a report lands in the ignored directory of the primary checkout'
 grep -q 'PR_REVIEW_' "$skills/dev-pr-review/SKILL.md" && note 'dev-pr-review: still writes PR_REVIEW_<n>.md at the root'
+has dev-pr-resolve 'pr-comments.sh $ARGUMENTS' 'the comment ledger arrives injected'
+has dev-pr-resolve '/dev-pr-review'  'someone elses PR goes to dev-pr-review'
+has dev-pr-resolve '--no-verify'     'never bypasses commit hooks'
 # The three scripts exist to take four judgement calls away from the model:
 # which test command, whether to wrap it, what the result line was, and how to
 # edit a checkbox. A skill that describes the act instead of calling the script
