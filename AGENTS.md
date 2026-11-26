@@ -1,6 +1,6 @@
 # opencode-skills
 
-Development skills for OpenCode, engineered for local ~30B models. These scripts compute facts before prompts run and advance work one discrete step at a time.
+Development skills for OpenCode, built for cloud and local models (for local-first setups, `pi-dev-skills` is recommended). These scripts compute facts before prompts run and advance work one discrete step at a time.
 
 ## Commands
 
@@ -15,7 +15,7 @@ Development skills for OpenCode, engineered for local ~30B models. These scripts
 | Build | none — no build system; just shell scripts and SKILL.md files |
 | Run | none — not a runtime application; skills load via OpenCode |
 
-Commands run on the host system (no container). Ensure you have `gh`, `node` (the guard suite loads the plugin), `shellcheck`, and an OpenCode model server at 64k or 128k; Docker is not needed here.
+Commands run on the host system (no container). Ensure you have `gh`, `node` (the guard suite loads the plugin), `shellcheck`, and OpenCode (with a cloud model, or a local model server at 64k or 128k); Docker is not needed here.
 
 `profile.sh` reads the window from `opencode.jsonc` and `step-budget.sh` sizes each step against it: 1,572 lines at 128k, 786 at 64k, 393 at 32k. A 32k window does not carry implement → review → fix → pr in one context — see **What each window buys** in the README.
 

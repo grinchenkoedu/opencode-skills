@@ -2,15 +2,15 @@
 
 <p>
   <a href="https://opencode.ai"><img src="https://img.shields.io/badge/OpenCode-1B1B1B?style=for-the-badge" alt="OpenCode" /></a>
-  <img src="https://img.shields.io/badge/Local_models-6E56CF?style=for-the-badge&logo=ollama&logoColor=white" alt="Local models" />
+  <img src="https://img.shields.io/badge/Cloud_%26_Local-6E56CF?style=for-the-badge" alt="Cloud & Local" />
   <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
   <a href="https://github.com/matasarei/opencode-skills/actions/workflows/checks.yml"><img src="https://img.shields.io/github/actions/workflow/status/matasarei/opencode-skills/checks.yml?style=for-the-badge&label=Checks" alt="Checks" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-3DA639?style=for-the-badge" alt="License: MIT" /></a>
 </p>
 
-> **Successor:** development continues in [**pi-dev-skills**](https://github.com/matasarei/pi-dev-skills), built on [Pi Coding Agent](https://pi.dev), whose extensions let code rather than the model drive the process. This repository is frozen as the OpenCode baseline.
+Development skills for [OpenCode](https://opencode.ai) built for **any cloud or local model**.
 
-Development skills for [OpenCode](https://opencode.ai) engineered specifically for **local ~30B models** (such as **Qwen3 Coder 30B**, **Prism Bonsai 27B**, and **Qwen3.8 27B**).
+> **Running local models?** Local models work here too, though we recommend [**pi-dev-skills**](https://github.com/matasarei/pi-dev-skills) (built on [Pi Coding Agent](https://pi.dev)) for local-first setups, where extensions drive the workflow directly in code.
 
 Instead of relying on fragile multi-variable reasoning and prompt guesswork, these skills compute facts before prompts run, replace subjective scoring with binary yes/no checks, verify code quotes mechanically, and advance work one discrete step at a time.
 
@@ -18,14 +18,21 @@ Instead of relying on fragile multi-variable reasoning and prompt guesswork, the
 
 ## Recommended Models
 
-These skills are optimized for ~30B parameter local coding models:
+`opencode-skills` works with any cloud or local model in OpenCode. For fast, low-cost cloud runs:
 
-1. **[Prism Bonsai 27B](https://lmstudio.ai/models/prism-ml/bonsai-27b)** (`prism-ml/bonsai-27b`) — Strong general coding, reasoning, and instruction-following. Best on Apple Silicon in MLX variant (32–48 GB RAM).
-2. **[Qwen3 Coder 30B](https://lmstudio.ai/models/qwen/qwen3-coder-30b)** (`qwen/qwen3-coder-30b`) — Tuned specifically for code generation, diff analysis, and fast tool calling. More capable, but requires more memory.
-3. **[Qwen3.8 27B](https://huggingface.co/Qwen/Qwen3.8-27B)** (`Qwen/Qwen3.8-27B`) — Often recommended for local agents as well, worth trying.
-4. **[Qwen3.5 9B](https://huggingface.co/Qwen/Qwen3.5-9B)** (`Qwen/Qwen3.5-9B`) — For lower-end hardware (8–12 GB VRAM) at 32k. One skill per session, not the whole cycle — see [What each window buys](#what-each-window-buys).
+1. **DeepSeek V4.1 Flash** — Very low cost, fast tool calling, and strong code generation.
+2. **Gemini 3.8 Flash** — Low cost, large context window, and reliable structured edits.
+3. **Claude Haiku** — Fast, dependable instruction following and diff editing.
+4. **Qwen3-Coder** — Strong code generation and diff analysis across cloud providers.
 
-> **Crucial Server Requirement**: Set your model server's context window (LM Studio, Ollama, or llama.cpp) to **64k or 128k**. Local tool calling degrades or loops if it is left at the default 4k/8k. What each of those windows actually buys you — and what 32k does not — is measured in [What each window buys](#what-each-window-buys).
+### Optional Local Models
+
+If you run locally (we recommend [`pi-dev-skills`](https://github.com/matasarei/pi-dev-skills) for local-first workflows):
+
+1. **Inkling 2 Mini** (`thinkingmachines/inkling-2-mini`) — Compact, fast local coding model.
+2. **[Prism Bonsai 27B](https://lmstudio.ai/models/prism-ml/bonsai-27b)** (`prism-ml/bonsai-27b`) — Strong general coding, reasoning, and instruction-following (best on Apple Silicon in MLX variant, 32–48 GB RAM).
+
+> **Local Server Requirement**: When running locally, set your model server's context window (LM Studio, Ollama, or llama.cpp) to **64k or 128k**. Local tool calling degrades or loops if left at 4k/8k — see [What each window buys](#what-each-window-buys).
 
 ---
 
@@ -58,7 +65,7 @@ A complete, recommended configuration is provided in [**`opencode.jsonc`**](open
 
 ### 1. Model Configuration
 
-Local models perform best in agentic loops when **reasoning is turned OFF by default** and the **output ceiling is capped at 16k tokens**:
+Cloud models work with OpenCode's built-in providers. If you also configure local models (e.g. LM Studio), they perform best in agentic loops when **reasoning is turned OFF by default** and the **output ceiling is capped at 16k tokens**:
 
 ```jsonc
 "models": {
@@ -158,7 +165,7 @@ Local models perform best in agentic loops when **reasoning is turned OFF by def
 1. **Initialize (once per repo)**: `/dev-init` inspects the project, writes build/test/lint commands and stack conventions to `AGENTS.md`.
 2. **Plan**: `/dev-plan` resolves input via `plan-input.sh`, validates referenced paths with `plan-check.sh`, and sizes each step using `step-budget.sh` against `contextTokens`, read from your `opencode.jsonc` and overridable with `DEV_SKILLS_CONTEXT`. Shared parsing is handled by `steps.awk`. For targeted bug fixes, `/dev-fix <issue>` investigates root cause and produces a verified plan in `.tasks/fix-<slug>.md`.
 3. **Or plan it for yourself**: `/dev-plan-manual` writes the same task file marked `**Mode:** manual`, then one step's walkthrough at a time as you reach it — anchors, the pattern in this repository to copy the shape of, and why, but never a body you could paste. It is for a repository that does not accept generated code, and for learning a codebase by changing it. `/dev-implement` refuses a plan carrying that marker, `/dev-review` reads hand-written code unchanged and hands its findings back to you rather than to `/dev-fix`, and `branch.sh` refuses the next step until you have committed the last one yourself.
-4. **Build**: `/dev-implement` injects exactly one step via `task-step.sh` onto a stacked branch named `step/<slug>-<n>`.
+4. **Build**: `/dev-implement` runs `step-start.sh` (which calls `branch.sh` and `step-budget.sh`) and injects exactly one step via `task-step.sh` onto a stacked branch named `step/<slug>-<n>`.
 5. **Review**: `/dev-review` runs 12 mechanical checks against changed files. If clean, proceed directly to `/dev-pr`. If unfixed blockers or warnings survive, hand off to `/dev-fix` to apply verified findings with one commit per finding.
 6. **Push & PR**: `/dev-pr` pushes the branch and opens the PR (annotated with `Depends on #` for stacked dependencies).
 7. **Next Step**: Continue to the next step with `/dev-implement <task-file> --continue`. Choose a context management pre-step based on your session: run `/compact` (or stay in the session) to keep conversational context while pruning raw tool outputs, or run `/new` for a fresh session when context has ballooned (>60k–80k tokens) or when starting fresh. Inter-step repository discoveries persist in `.devskills/learned.md`.
@@ -183,8 +190,7 @@ for 128k. `DEV_SKILLS_CONTEXT` overrides it when your server is configured diffe
 config file. **A step sized for a window you do not have still runs — it just degrades**, which
 is why the number is detected rather than assumed.
 
-The 9B option under [Recommended Models](#recommended-models) is 8–12 GB VRAM at 32k: good for
-`/dev-plan`, `/dev-review` and `/dev-pr` one at a time, not for the cycle in one context.
+The 32k column above applies to smaller local setups: good for `/dev-plan`, `/dev-review` and `/dev-pr` one at a time, not for the full cycle in one context.
 
 ---
 
@@ -265,10 +271,10 @@ writes the body to `.devskills/pr-body.md` and hands you the URL.
 
 ## Mechanics & Guardrails
 
-* **The Guard (`lib/dev-guard.js`)**: An OpenCode plugin that intercepts bash commands and blocks dangerous actions: force pushes, amended commits, skipped git hooks, pushes to `main`/`master`, and unauthorized `gh pr merge`. Verified by the case table in `evals/guard/cases.sh`.
+* **The Guard (`lib/dev-guard.js`)**: An OpenCode plugin that intercepts tool calls to block dangerous actions (force pushes, amended commits, skipped git hooks, pushes to `main`/`master`, unauthorized `gh pr merge`, `sed -i` in-place edits, and no-op `write` calls) and appends targeted error hints in `tool.execute.after` (`lib/brackets.js`, `lib/tsc-lines.js`, `lib/edit-miss.js`). Verified by the case table in `evals/guard/cases.sh`.
 * **Mechanical Evidence Verification**: `lib/findings-check.sh` validates quoted code against current files on disk, discarding hallucinated findings.
 * **Cross-Stack Route Verification**: `lib/http-check.sh` verifies HTTP routes and responses across tech stacks (validating connection status, HTTP codes, auth drops to login routes/inputs, empty responses / white screens of death, English framework error screens, required domain content assertions, and crash/traceback signatures across PHP, Python, Node, Java, Go, Ruby, and SQL engines).
-* **One Verdict Line for the Suite**: `lib/test.sh` picks `test` or `testScoped` from the profile, wraps it in `timeoutTool`, runs it, and prints a single line carrying the runner's own summary — `TEST PASS | OK (43 tests, 118 assertions)`, `TEST FAIL | …`, `TEST MISSING — …`, `TEST TIMEOUT — …`. Those four decisions used to be prose in three separate skills, and a model that dropped any one of them reported "tests pass" with nothing behind it. A null `timeoutTool` is declared in the verdict rather than dropped silently.
+* **One Verdict Line for the Suite**: `lib/test.sh` picks `test` or `testScoped` from the profile, wraps it in `timeoutTool`, runs it, and prints a single line carrying the runner's own summary — `TEST PASS | OK (43 tests, 118 assertions)`, `TEST FAIL | …`, `TEST OPEN | …`, `TEST MISSING — …`, `TEST TIMEOUT — …`. Those decisions used to be prose in three separate skills, and a model that dropped any one of them reported "tests pass" with nothing behind it. A null `timeoutTool` is declared in the verdict rather than dropped silently. `lib/test-open.sh` lets a step record a newly added failing test as open (`TEST OPEN`) so later steps are not blocked, while `/dev-pr` still refuses until it passes.
 * **Red First**: `lib/test.sh --red <name>` runs a step's scoped test before its code exists and says whether it failed as a test — `RED PROVEN | …` when at least one test ran and failed, `RED NOT PROVEN — …` when it passed, `RED UNCLEAR | …` for a parse, collection or build error or an unrecognised runner, and `RED UNCLEAR — no testScoped …` for a profile with no `testScoped` carrying `{name}`. A test written after the code can pass either way, so a green line alone never proved it meant anything. Every step in a plan carries a `Red:` line — the test that must fail first, or `none — <reason>` — and `plan-check.sh` refuses one without it. `/dev-implement` writes that test before any production line; the verdict is recorded in `.devskills/red-result`, apart from the green record, and `/dev-review` (C11) and `/dev-pr` read it rather than taking the model's word. A red record counts only on the branch it was recorded on, with its commit at or behind HEAD — so run red after the step branch is cut, and do not rename the branch afterwards: a record from another branch, an earlier step or a renamed branch reads as stale.
 * **Ticking a Step**: `lib/tick.sh <task-file> <n> "<what landed>"` rewrites `N. [ ] title` as `N. [x] title — what landed`. It is the smallest edit in the cycle and the one that fails silently: a step left unticked is a step the next run builds again. It refuses a step written in any other shape rather than guessing, and a second tick is a no-op.
 * **Stacked Step Branches**: `lib/branch.sh <task-file> <n>` cuts `step/<slug>-<n>` from the previous step's branch when it exists and from the base branch otherwise, which is what makes the pull requests stack. Getting that base wrong points a step's PR at `main` and shows every earlier step's diff inside it. An existing branch is switched to, never re-cut, and a switch is refused while the tree is dirty so half of one step cannot follow into another step's PR.
