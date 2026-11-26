@@ -126,7 +126,7 @@ Cloud models work with OpenCode's built-in providers. If you also configure loca
 
 * **Scratch Permissions (`/tmp`)**: OpenCode defaults `external_directory` to `ask`. Allowing `/tmp/**` and `/private/tmp/**` lets models write temporary scripts, diffs, and test outputs without stalling autonomous runs, while keeping sensitive paths outside the workspace protected.
 * **`temperature: 0`**: OpenCode defaults Qwen models to `0.55`. Zero temperature is required for deterministic code reviews and consistent tool use.
-* **Plan Mode Permissions**: OpenCode's native `plan` agent blocks file edits by default. Adding permissions for `.tasks/**` and `*.md` allows `/dev-plan` to write and update actionable task files.
+* **Plan Mode Permissions**: OpenCode's native `plan` agent blocks file edits by default. Adding permissions for `.tasks/**` and `*.md` allows `/dev-plan`, `/dev-research`, and `/dev-audit` to write task files, while `permission.skill` prompts (`"ask"`) if planning skills are run in `build` mode and denies (`"deny"`) `/dev-implement`, `/dev-fix`, `/dev-pr`, and `/dev-pr-resolve` in `plan` mode. Switch between `plan` and `build` with `Tab`.
 
 ---
 

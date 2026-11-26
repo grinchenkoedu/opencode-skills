@@ -75,7 +75,15 @@
   },
   "agent": {
     "build": {
-      "temperature": 0
+      "temperature": 0,
+      "permission": {
+        "skill": {
+          "dev-plan": "ask",
+          "dev-plan-manual": "ask",
+          "dev-research": "ask",
+          "dev-audit": "ask"
+        }
+      }
     },
     "plan": {
       "temperature": 0,
@@ -85,6 +93,12 @@
           "**/*.md": "allow",
           ".tasks/**": "allow",
           "plans/**": "allow"
+        },
+        "skill": {
+          "dev-implement": "deny",
+          "dev-fix": "deny",
+          "dev-pr": "deny",
+          "dev-pr-resolve": "deny"
         }
       }
     }
