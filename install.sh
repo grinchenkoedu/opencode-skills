@@ -39,6 +39,11 @@ for installed in "${LIB:?}"/*.sh "${LIB:?}"/*.awk; do
 done
 cp "$SRC"/lib/*.sh "$SRC"/lib/*.awk "$LIB/"
 chmod +x "$LIB"/*.sh
+for helper in "$SRC"/lib/*.js; do
+  [ -f "$helper" ] || continue
+  [ "$(basename "$helper")" = "dev-guard.js" ] && continue
+  cp "$helper" "$LIB/"
+done
 
 # Skills. Clean up obsolete dev-* skills first so deleted skills do not linger.
 for installed in "${SKILLS:?}"/dev-*/; do

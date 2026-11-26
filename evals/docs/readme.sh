@@ -41,11 +41,14 @@ for token in \
   'http-check.sh' \
   'test.sh' \
   'TEST PASS' \
+  'test-open.sh' \
+  'TEST OPEN' \
   'test.sh --red' \
   'RED PROVEN' \
   'only on the branch it was recorded on' \
   'tick.sh' \
   'branch.sh' \
+  'step-start.sh' \
   'DEV_SKILLS_QUEUE_CAP' \
   'Supported Stacks' \
   'Adding a stack' \

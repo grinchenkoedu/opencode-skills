@@ -76,6 +76,12 @@ cat > "$work/cases.txt" <<'TABLE'
 # allowed — nothing to do with git, or nothing to read
 0|ls -la
 0|rm -rf build
+# refused — sed -i (use edit instead)
+2|sed -i 's/foo/bar/' file.txt
+2|sed -i '' 's/foo/bar/' file.txt
+2|sed --in-place 's/foo/bar/' file.txt
+0|sed -n '1,10p' file.txt
+0|grep 'sed -i' file.txt
 TABLE
 
 # The same table with a profile naming another base branch: it is refused too,
@@ -179,6 +185,40 @@ if (!readRefused) { fails++; console.log(`FAIL  ${label} reading a directory was
 // ...and reading a file is not: a refusal that caught every path would stop the model reading anything
 try { await hook({ tool: "read" }, { args: { filePath: globDummyFile } }) }
 catch (e) { fails++; console.log(`FAIL  ${label} reading a file was refused: ${e.message}`) }
+// No-op write (identical content to existing file) is refused; changed content is allowed
+const noopFile = `${dir}/noop.txt`
+writeFileSync(noopFile, "same content\n")
+let noopRefused = false
+try { await hook({ tool: "write" }, { args: { filePath: noopFile, content: "same content\n" } }) }
+catch (e) { if (e.message.includes("already has exactly this content")) noopRefused = true }
+if (!noopRefused) { fails++; console.log(`FAIL  ${label} no-op write was not refused`) }
+try { await hook({ tool: "write" }, { args: { filePath: noopFile, content: "new content\n" } }) }
+catch (e) { fails++; console.log(`FAIL  ${label} changed write was refused: ${e.message}`) }
+// tool.execute.after hints: brackets, tsc-lines, edit-miss
+const after = hooks["tool.execute.after"]
+if (typeof after !== "function") {
+  fails++; console.log(`FAIL  ${label} tool.execute.after hook missing`)
+} else {
+  const brokenJs = `${dir}/broken.js`
+  writeFileSync(brokenJs, "function f() {\n  return 1\n")
+  const bashOut = { args: { command: "node broken.js" }, output: `${brokenJs}:2: SyntaxError: Unexpected end of file` }
+  await after({ tool: "bash" }, bashOut)
+  if (!bashOut.output.includes("never closes") && !bashOut.output.includes("still open")) {
+    fails++; console.log(`FAIL  ${label} tool.execute.after did not append syntaxHint: ${bashOut.output}`)
+  }
+  const tsFile = `${dir}/app.ts`
+  writeFileSync(tsFile, "const unused = 1\n")
+  const tscOut = { args: { command: "tsc --noEmit" }, output: `app.ts(1,7): error TS6133: 'unused' is declared but its value is never read.` }
+  await after({ tool: "bash" }, tscOut)
+  if (!tscOut.output.includes("const unused = 1")) {
+    fails++; console.log(`FAIL  ${label} tool.execute.after did not append tscLines: ${tscOut.output}`)
+  }
+  const editOut = { args: { filePath: noopFile, oldString: "same content\nmissing line", newString: "x" }, output: "Error: oldString not found in content" }
+  await after({ tool: "edit" }, editOut)
+  if (!editOut.output.includes("Put only the lines you change in oldString")) {
+    fails++; console.log(`FAIL  ${label} tool.execute.after did not append editMissHint: ${editOut.output}`)
+  }
+}
 process.exit(fails ? 1 : 0)
 JS
 
