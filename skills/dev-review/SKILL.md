@@ -11,7 +11,7 @@ Never edit the code under review, never commit, push or post. What this *does* w
 
 **First, empty `.devskills/findings.md`** (`: > .devskills/findings.md`) — it is appended to; a leftover reads as this run's.
 
-Then work the queue at the bottom **one file per step** — do not batch, do not skim ahead. For each, in queue order: read it; answer the checks below yes or no, about that file only; every YES appends one line to `.devskills/findings.md`. Read at most the **top 3 files** in full; judge the rest from the diff, and name them as judged-from-diff.
+Then work the queue at the bottom **one file per step** — do not batch, do not skim ahead. For each, in queue order: read it; answer the checks below yes or no, about that file only; every YES appends one line to `.devskills/findings.md`. Check `git log <base>..HEAD --format=%b` for `Ruling:` lines and verify each against the diff. Read at most the **top 3 files** in full; judge the rest from the diff, and name them as judged-from-diff.
 
 ## The checks
 
@@ -27,7 +27,7 @@ Answer yes or no. Do not weigh, rank or reconsider — just answer.
 - **C8 VERSION** — *(moodle-plugin only)* does it touch `classes/`, `db/`, caches or tasks with no `version.php` bump?
 - **C9 NULL** — does it use a value that can be null without checking?
 - **C10 LOOP** — does it add a loop, cursor or search that may not terminate on empty, duplicate or gapped data?
-- **C11 TEST** — does it add logic with no test, a test whose assertion proves nothing (e.g. status 200 without checking content/state), or a test while the red receipt below is `(none)`, `RED NOT PROVEN` or `RED UNCLEAR`?
+- **C11 TEST** — does it add logic with no test, a hollow assertion (e.g. status 200 only), or a test while the red receipt below is `(none)`, `RED NOT PROVEN` or `RED UNCLEAR`?
 - **C12 ERROR** — does it add a throw, guard or error return that nothing tests?
 
 **Severity is fixed**: C1–C8 `BLOCKER`, C9–C12 `WARNING`. Do not choose it yourself.

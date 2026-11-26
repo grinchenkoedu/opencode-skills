@@ -41,7 +41,7 @@ bash ${DEV_SKILLS_LIB:-$HOME/.config/opencode/dev-lib}/test.sh
 
 ## Step 4 — Tick and commit
 
-Tick it — `bash ${DEV_SKILLS_LIB:-$HOME/.config/opencode/dev-lib}/tick.sh <task-file> <n> "<what landed> — <the RED line>"`, never by hand. One commit per step, in English. Moodle: bump `$plugin->version` when `classes/`, `db/`, caches or tasks changed. Lock file with manifest. Front-end sources → build.
+Tick it — `bash ${DEV_SKILLS_LIB:-$HOME/.config/opencode/dev-lib}/tick.sh <task-file> <n> "<what landed> — <the RED line>"`, never by hand. One commit per step, in English; record any unasked choice in the commit body as `Ruling: <what> — <why> — <cost if wrong>`. Moodle: bump `$plugin->version` when `classes/`, `db/`, caches or tasks changed. Lock file with manifest. Front-end sources → build.
 
 ## Step 5 — Report
 
